@@ -35,3 +35,4 @@ Both permissions are available in the "Compute Network User" role, please consid
 ## More information
 
 [Cloud Interconnect Documentation](https://cloud.google.com/interconnect/docs/)
+[Custom Route Advertisements](https://cloud.google.com/router/docs/how-to/advertising-overview)

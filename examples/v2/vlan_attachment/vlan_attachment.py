@@ -46,7 +46,7 @@ def GenerateConfig(context):
     {'name': 'cloud_router_ip',
      'value': '$(ref.' + vlan_attach_name + '.cloudRouterIpAddress)'}]
 
-  #add a Cloud Router interface that connects to the VLAN attachment
+  # add a Cloud Router interface that connects to the VLAN attachment
   resources.append({
     'name': router_interface_name,
     'action': 'gcp-types/compute-v1:compute.routers.patch',
@@ -66,9 +66,9 @@ def GenerateConfig(context):
   
   if 'peer_ip_address' in  context.properties: 
     # Add a BGP peer to the interface
-    resources.append({
+    bgp_peer = {
       'name': bgp_peer_name,
-      'action': 'gcp-types/compute-v1:compute.routers.patch',
+      'action': 'gcp-types/compute-beta:compute.routers.patch',
       'properties': {
         'router': router_name,
         'region': context.properties['cr_region'],
@@ -82,7 +82,16 @@ def GenerateConfig(context):
         }]
       },
       'metadata': {'dependsOn': [router_interface_name]}
-    })     
+    }
+    #if custom routes advertisement is enabled, add routes that we're going to advertise
+    if 'custom_routes_to_advertise' in context.properties and  len(context.properties['custom_routes_to_advertise']) > 0:
+      bgp_peer['properties']['bgpPeers'][0]['advertiseMode'] = 'CUSTOM'
+      bgp_peer['properties']['bgpPeers'][0]['advertisedIpRanges'] = context.properties['custom_routes_to_advertise']
+    
+    resources.append(bgp_peer)     
 
+    
+      
+   
   return {'resources': resources, 'outputs': outputs}
   

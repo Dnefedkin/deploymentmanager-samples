@@ -21,4 +21,10 @@ resources:
     peer_asn: <PEER_ASN> 
     #customer router link local IP address (should not be set during the first run)
     #peer_ip_address: <CUSTOMER_LINK_LOCAL_IP>
- 
+    
+    #if you want to advertise just some ranges, specify them below  
+    #  custom_routes_to_advertise:
+    #   - range: 10.0.1.0/24
+    #     description: "Description of range 1"
+    #   - range: 10.0.2.0/24
+    #     description: "Description of range 2"
